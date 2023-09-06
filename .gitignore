@@ -1,0 +1,6 @@
+node_modules/
+lib/
+.idea/
+*.tgz
+*.zip
+*.db.sqlite
