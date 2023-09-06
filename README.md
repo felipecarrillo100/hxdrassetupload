@@ -47,34 +47,6 @@ npm install ndbsqlite
 
 ```
 
-2) Create controllers using NDBController and attach them to your Express app using an express Router and mount your app at any endpoint you like
-
-```ts
-// Create a SQLIte databse file and connect to it. 
-// You can create it manually using the sqlite3 package or use the NDBSqLite class degined in this package
-const ndbSqlite = new NDBSqLite({filePath:"ndb.db.sqlite"});
-
-// Pass an sql file defining your tables
-ndbSqlite.init("./sql/dbschema.sql").then(db=>{
-    
-    // Pass the sqlite database and your model, type it with the class of our model
-    const controller = new NDBController<TestModel>({db, model: TestModel});
-    const app = express();
-    app.use(express.json());
-    
-    const router = Router()
-    controller.addRoutes(router);
-
-    // This api will be mapped to http://localhost:3000/test
-    app.use(ROUTE, "/test");
-
-    app.listen(3000, ()=> {
-        console.log("Listening on port " + 3000);
-    })
-});
-
-```
-
 
 ## Requirements.
 * Sqlite3 is used to provide the sqlite functionality
