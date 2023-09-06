@@ -1,15 +1,7 @@
-# NDBSqlite    
+# HxDRAssetUpload    
 
 ## Description
-The NDBSqlite is a library to quickly publish tables in SQLITE as a Rest API
-
-The Components are:
-
-* [NDBModel.ts](src%2FNDBModel.ts) Any model you define must extend from this model 
-* [NDBRepository.ts](src%2FNDBRepository.ts) The repository provides access to the database
-* [NDBController.ts](src%2FNDBController.ts) The controllers creates REST API entries using express router 
-* [QueryResult.ts](src%2FQueryResult.ts) Provide some types for input output parameters
-* [NDBSqLite.ts](src%2FNDBSqLite.ts) It provides a simplified creation and initialization of a Sqlite database, optional 
+Pocket size library to upload assets to HxDR (beta)
 
 ## To build
 This is the source code of an npm package. To build install and build the library. This will create a lib folder with the transpiled library.
@@ -34,41 +26,25 @@ npm install ndbsqlite
 ## To use
 1) Define your own models extending from NDBModel
 ```ts
-class TestModel extends NDBModel {
-    static TableName = "TestModel";
+    const hxDrAsseUpload= new HxDRAssetUpload({db});
+    hxDrAsseUpload.start();
+    
+    // ...  execute your tasks here i.e.
+    const asset = new HxDRAssetUploadTask({
+        assetName: assetName,
+        assetId: "",
+        parentFolderId: "647dc49f-4696-4660-941e-8eb4ed66dccf",
+        assetType: AssetTypeEnum.OBJ_UPLOAD,
+        status: HxDRUploadStatusEnum.NEW
+    })
+    this.hxdrAsseUpload.addNewTask(asset, files).then(value=>{
+        res.json(value);
+    });
 
-    private _id: number;
-    private _a: string;
-    private _b: string;
 
-    constructor(options?:{id?: number, a: string, b: string}) {
-        super();
-        this._id = options?.id;
-        this._a = options?.a;
-        this._b = options?.b;
-    }
-    get id(): number {
-        return this._id;
-    }
-    set id(value: number) {
-        this._id = value;
-    }
-    get a(): string {
-        return this._a;
-    }
-    set a(value: string) {
-        this._a = value;
-    }
-    get b(): string {
-        return this._b;
-    }
-    set b(value: string) {
-        this._b = value;
-    }
-    static getKeys() {
-        return ["id", "a", "b"];
-    }
-}
+
+   hxDrAsseUpload.stop();
+
 ```
 
 2) Create controllers using NDBController and attach them to your Express app using an express Router and mount your app at any endpoint you like
