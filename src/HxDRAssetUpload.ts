@@ -124,9 +124,33 @@ export class HxDRAssetUpload {
             }
         }
 
-        return({success: true, cause: ""});
+        return({success: true, cause: "", id:assetId, assetId: createAsset.id});
     }
 
+
+    public async deleteAsset(assetId: string) {
+        let result = null;
+        let id = undefined;
+        const assetQueryResults = await this.assetsRepository.queryLike({query:{assetId}});
+        try {
+            result = await deleteAsset({assetId});
+        } catch (e) {
+            if (e.graphQLErrors.length===1 && e.graphQLErrors[0].extensions.code === "NOT_FOUND") {
+                return {success: false, cause: "NOT_FOUND", id: id, assetId}
+            } else {
+                return {success: false, cause: "HxDR graphQLErrors", id: id, assetId}
+            }
+        }
+        if (result && result.data && result.data.deleteAssetV2.success) {
+            if (assetQueryResults.matches>0) {
+                id = assetQueryResults.items[0].id
+                await this.assetsRepository.delete(id);
+            }
+            return {success: true, cause: "", id, assetId}
+        } else {
+            return {success: false, cause: "HxDR API can't delete", id, assetId}
+        }
+    }
     public async deleteTask(id: number) {
         let assetEntry = null;
         try {

@@ -4,3 +4,4 @@ lib/
 *.tgz
 *.zip
 *.db.sqlite
+testassertions/*.txt
