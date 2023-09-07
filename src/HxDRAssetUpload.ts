@@ -8,7 +8,7 @@ import {ChunkUploadTask} from "./core/tasks/ChunkUploadTask";
 import {BufferUploadTask} from "./core/tasks/BufferUploadTask";
 import {Database} from "sqlite3";
 import {getFilesInfoSimplified} from "./fileutils/FileUtils";
-import {createAssetV3, deleteAsset} from "./hxdrlib/MutationLibrary";
+import {createAssetV3, createFolder, deleteAsset, deleteFolder} from "./hxdrlib/MutationLibrary";
 import {AssetTypeEnum} from "./hxdrlib/AssetTypeEnum";
 import {HxDRUploadStatusEnum} from "./core/models/HxDRUploadStatusEnum";
 
@@ -150,6 +150,45 @@ export class HxDRAssetUpload {
             return {success: true, cause: "", id: id, assetId: assetEntry.assetId}
         } else {
             return {success: false, cause: "HxDR API can't delete", id: id, assetId: assetEntry.assetId}
+        }
+    }
+
+    public async deleteFolder(folderId: string, projectId: string) {
+        let result = null;
+        try {
+            result = await deleteFolder({id: folderId, projectId });;
+        } catch (e) {
+            if (e.graphQLErrors.length===1 && e.graphQLErrors[0].extensions.code === "NOT_FOUND") {
+                return {success: false, cause: "NOT_FOUND", folderId,  projectId}
+            } else {
+                return {success: false, cause: "HxDR graphQLErrors", folderId,  projectId}
+            }
+        }
+        if (result && result.data && result.data.deleteFolderV2.__typename==="DeleteFolderOutput") {
+            return {success: true, cause: "", folderId,  projectId}
+        } else {
+            return {success: false, cause: "HxDR API can't delete", folderId,  projectId}
+        }
+    }
+
+    public async createFolder(name: string, folderId: string, projectId: string) {
+        let result = null;
+        try {
+            result = await createFolder({parentFolderId: folderId, projectId, name });
+        } catch (e) {
+            if (e.graphQLErrors.length===1 && e.graphQLErrors[0].extensions.code === "NOT_FOUND") {
+                return {success: false, cause: "NOT_FOUND", folderId,  projectId}
+            } else {
+                return {success: false, cause: "HxDR graphQLErrors", folderId,  projectId}
+            }
+        }
+        if (result && result.data && result.data.createFolderV2.__typename==="FolderErrorDuplicateNameOutput"){
+            return {success: false, cause: "Duplicated name", id: result.data.createFolderV2.id, folderId, projectId}
+        } else
+        if (result && result.data && result.data.createFolderV2.__typename==="FolderOutput") {
+            return {success: true, cause: "", id: result.data.createFolderV2.id, folderId, projectId}
+        } else {
+            return {success: false, cause: "HxDR API can't delete folder", folderId,  projectId}
         }
     }
 }
