@@ -13,7 +13,8 @@
     "copyscss": "copyfiles -u 1 \"src/**/*.scss\" ./lib",
     "copysvg": "copyfiles -u 1 \"src/**/*.svg\" ./lib",
     "copyfonts": "copyfiles -u 1 \"src/fonts/**\" ./lib",
-    "build": "npm run transpile && npm run copyjs && npm run copycss && npm run copyscss && npm run copysvg && npm run copyfonts"
+    "copysql": "copyfiles -u 1 \"src/sql/**\" ./lib",
+    "build": "npm run transpile && npm run copyjs && npm run copycss && npm run copyscss && npm run copysvg && npm run copyfonts && npm run copysql"
   },
   "keywords": [],
   "author": "",
