@@ -1,6 +1,6 @@
 {
   "name": "hxdrassetupload",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "",
   "files": [
     "lib/"
@@ -36,6 +36,7 @@
   },
   "dependencies": {
     "@apollo/client": "^3.8.2",
+    "mime": "^3.0.0",
     "ndbsqlite": "^0.0.6",
     "sqlite3": "^5.0.0"
   },
