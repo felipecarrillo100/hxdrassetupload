@@ -215,4 +215,12 @@ export class HxDRAssetUpload {
             return {success: false, cause: "HxDR API can't delete folder", folderId,  projectId}
         }
     }
+
+    public getRepositories() {
+        return {
+            assets: this.assetsRepository,
+            files: this.filesRepository,
+            chunks: this.chunksRepository,
+        }
+    }
 }

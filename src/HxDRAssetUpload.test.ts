@@ -127,5 +127,23 @@ describe('HxDRAssetUpload ',  () => {
             expect(false).toBe(true);
         }
     })
+
+    it('HxDRAssetUpload Simple delete (by folderId)', async () => { 8989
+        let response = null;
+        setToken(validToken);
+
+        const database = new NDBSqLite({filePath:"test.db.sqlite"});
+
+        const sqlpath = path.join(__dirname, "./sql/dbschema.sql");
+        const db = await database.init(sqlpath);
+
+        const hxDrAsseUpload= new HxDRAssetUpload({db});
+        const folderId = "5380e4eb-ad57-41e5-b968-04a59f43b3ea";
+        const projectId = "301dd3ab-76cc-4ac7-9786-a8bc015d2cad";
+
+        const result2 = await hxDrAsseUpload.deleteFolder(folderId, projectId);
+        expect(result2.success).toBe(true);
+
+    })
 })
 
